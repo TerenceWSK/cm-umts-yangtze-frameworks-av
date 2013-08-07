@@ -1429,7 +1429,12 @@ status_t OMXCodec::setupAVCEncoderParameters(const sp<MetaData>& meta) {
 
 #ifndef QCOM_HARDWARE
 #ifdef USE_TI_DUCATI_H264_PROFILE
-    if ((strncmp(mComponentName, "OMX.TI.DUCATI1", 14) != 0)
+    // Force using baseline profile here.
+    // This if for workaround the issue found while encoding and thumbnail generating
+    // happens simultanously. Using baseline profile can avoid using HW decoder
+    // while PV been used for encoding
+    // --- Gopise
+    if ((strncmp(mComponentName, "OMX.TI.DUCATI1", 14) == 0)
             && (h264type.eProfile != OMX_VIDEO_AVCProfileBaseline)) {
 #else
     if (h264type.eProfile != OMX_VIDEO_AVCProfileBaseline) {
